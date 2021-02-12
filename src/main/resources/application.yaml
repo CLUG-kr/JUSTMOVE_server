@@ -5,6 +5,8 @@ spring:
     store-type: jdbc
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
