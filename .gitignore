@@ -63,6 +63,7 @@ hs_err_pid*
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+.idea/.name
 
 # Gradle
 .idea/**/gradle.xml
@@ -142,3 +143,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+src/main/resources/application-oauth.yaml

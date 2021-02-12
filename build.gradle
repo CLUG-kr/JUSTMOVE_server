@@ -29,17 +29,15 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web:')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('com.h2database:h2')
-    compile('org.springframework.boot:spring-boot-starter-mustache')
-//    compile('org.springframework.boot:spring-boot-starter-oauth2-client')
+    compile('org.springframework.boot:spring-boot-starter-oauth2-client')
     compile('org.springframework.session:spring-session-jdbc')
-    compile('org.mariadb.jdbc:mariadb-java-client')
     compileOnly('org.projectlombok:lombok:1.18.16')
     annotationProcessor('org.projectlombok:lombok:1.18.16')
 
-    testCompile('org.springframework.boot:spring-boot-starter-test'){
-        exclude module : 'junit'
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
     }
-//    testCompile('org.springframework.security:spring-security-test')
+    testCompile('org.springframework.security:spring-security-test')
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testCompile("org.junit.jupiter:junit-jupiter-params")
