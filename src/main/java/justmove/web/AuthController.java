@@ -15,10 +15,15 @@ public class AuthController {
     @Value("${config.base-url}")
     private String baseUrl;
 
-    @GetMapping("/auth/{registrationId}")
-    public String loginViaGoogle(@PathVariable("registrationId") String registrationId, HttpServletRequest request) {
+    @GetMapping("/auth/login/{registrationId}")
+    public String socialLogin(@PathVariable("registrationId") String registrationId, HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("prevPage", referrer);
         return "redirect:/oauth2/authorization/" + registrationId;
+    }
+
+    @GetMapping("/auth/logout")
+    public String logout() {
+        return "redirect:/logout";
     }
 }

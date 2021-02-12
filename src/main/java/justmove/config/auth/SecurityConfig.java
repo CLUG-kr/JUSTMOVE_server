@@ -2,6 +2,7 @@ package justmove.config.auth;
 
 import justmove.domain.user.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${config.base-url}")
+    private String baseUrl;
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -35,7 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
-                .successHandler(successHandler());
+                .successHandler(successHandler())
+                .and()
+                .logout()
+                .logoutSuccessUrl(baseUrl);
     }
 
 }
