@@ -1,6 +1,6 @@
 package justmove.web;
 
-import justmove.config.auth.LoginUser;
+import justmove.config.auth.LoginSessionUser;
 import justmove.config.auth.dto.SessionUser;
 import justmove.service.SocialService;
 import justmove.service.exception.UserNotFoundException;
@@ -21,7 +21,7 @@ public class SocialController {
     private final SocialService socialService;
 
     @PostMapping("/follow/{targetId}")
-    public ResponseEntity<ApiResponseMessage> follow(@LoginUser() SessionUser fromUser,
+    public ResponseEntity<ApiResponseMessage> follow(@LoginSessionUser() SessionUser fromUser,
                                                      @PathVariable("targetId") Long targetId) {
         try {
             socialService.follow(fromUser.getId(), targetId);
@@ -32,7 +32,7 @@ public class SocialController {
     }
 
     @PostMapping("/unfollow/{targetId}")
-    public ResponseEntity<ApiResponseMessage> unfollow(@LoginUser() SessionUser fromUser,
+    public ResponseEntity<ApiResponseMessage> unfollow(@LoginSessionUser() SessionUser fromUser,
                                                        @PathVariable("targetId") Long targetId) {
         try {
             socialService.unfollow(fromUser.getId(), targetId);
