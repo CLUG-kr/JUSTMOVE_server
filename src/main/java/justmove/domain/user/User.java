@@ -1,12 +1,15 @@
 package justmove.domain.user;
 
 import justmove.domain.BaseEntity;
+import justmove.domain.challenge.Challenge;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,6 +37,8 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
     private Set<User> followings = new HashSet<>();
 
+    @OneToMany(mappedBy = "uploader")
+    private List<Challenge> challenges = new ArrayList<>();
 
     @Builder
     public User(String name, String email, String picture, Role role) {
