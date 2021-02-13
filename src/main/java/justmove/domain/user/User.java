@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Column(length = 50, nullable = false)
@@ -26,6 +26,15 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_follow", joinColumns = @JoinColumn(name = "from_user"), inverseJoinColumns =
+    @JoinColumn(name = "to_user"))
+    private Set<User> followers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
+    private Set<User> followings = new HashSet<>();
+
+
     @Builder
     public User(String name, String email, String picture, Role role) {
         this.name = name;
@@ -38,6 +47,16 @@ public class User extends BaseEntity {
         this.name = name;
         this.picture = picture;
         return this;
+    }
+
+    public void follow(User target) {
+        this.followings.add(target);
+        target.followers.add(this);
+    }
+
+    public void unfollow(User target) {
+        this.followings.remove(target);
+        target.followers.remove(this);
     }
 
     public String getRoleKey() {
