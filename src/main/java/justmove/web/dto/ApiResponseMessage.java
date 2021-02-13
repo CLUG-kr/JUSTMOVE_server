@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Getter
 @ToString
-public class ApiResponseMessage<T> {
+public class ApiResponseMessage<T> implements Serializable {
     private final int statusCode;
     private String message;
     private T data;
@@ -35,8 +37,9 @@ public class ApiResponseMessage<T> {
     }
 
     @RequiredArgsConstructor
+    @Getter
     @ToString
-    static class MessageResponse {
+    static class MessageResponse implements Serializable {
         private final String msg;
     }
 
