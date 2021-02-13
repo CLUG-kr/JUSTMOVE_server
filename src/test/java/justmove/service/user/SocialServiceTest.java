@@ -1,6 +1,6 @@
 package justmove.service.user;
 
-import justmove.domain.user.Role;
+import justmove.domain.user.MockUser;
 import justmove.domain.user.User;
 import justmove.domain.user.UserRepository;
 import justmove.service.SocialService;
@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest()
 public class SocialServiceTest {
 
-    User user1 = User.builder().name("홍길동").email("test@test.com").picture("http://image.png").role(Role.USER).build();
-    User user2 =
-            User.builder().name("김동수").email("asdf@test.com").picture("http://picture.png").role(Role.USER).build();
-    User user3 = User.builder().name("김갑자").email("1234@test.com").picture("http://some.png").role(Role.USER).build();
+    private User user1;
+    private User user2;
+    private User user3;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -29,6 +29,9 @@ public class SocialServiceTest {
 
     @BeforeEach
     public void setUp() {
+        user1 = MockUser.mockUser1();
+        user2 = MockUser.mockUser2();
+        user3 = MockUser.mockUser3();
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
