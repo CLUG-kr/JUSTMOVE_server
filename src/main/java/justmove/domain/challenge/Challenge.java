@@ -1,11 +1,15 @@
 package justmove.domain.challenge;
 
 import justmove.domain.BaseEntity;
+import justmove.domain.tag.Tag;
 import justmove.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -20,8 +24,19 @@ public class Challenge extends BaseEntity {
     @Embedded
     private Movie movie;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private User uploader;
 
+    @ManyToMany(mappedBy = "challenges", cascade = CascadeType.ALL)
+    private List<Tag> tags = new ArrayList<>();
+
+    @Builder
+    public Challenge(String title, String description, Movie movie, User uploader, List<Tag> tags) {
+        this.title = title;
+        this.description = description;
+        this.movie = movie;
+        this.uploader = uploader;
+        this.tags = tags;
+    }
 }

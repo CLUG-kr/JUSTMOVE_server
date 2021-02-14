@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
     private Set<User> followings = new HashSet<>();
 
-    @OneToMany(mappedBy = "uploader")
+    @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL)
     private List<Challenge> challenges = new ArrayList<>();
 
     @Builder
