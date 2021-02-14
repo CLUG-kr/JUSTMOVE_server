@@ -107,7 +107,7 @@ public class SocialControllerTest {
         user1.follow(user2);
         // when
         mvc.perform(post(url).session(session).contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isCreated());
+                .andExpect(status().isAccepted());
 
         // then
         User resultUser1 = userRepository.findById(user1.getId()).get();
