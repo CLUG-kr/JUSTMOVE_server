@@ -4,6 +4,12 @@ spring:
       - oauth
       - oauth-secret
       - config
+      - cloud
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
   session:
     store-type: jdbc
   jpa:
