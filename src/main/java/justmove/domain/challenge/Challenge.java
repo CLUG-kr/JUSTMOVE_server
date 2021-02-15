@@ -25,7 +25,7 @@ public class Challenge extends BaseEntity {
     @Embedded
     private Movie movie;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
     private User uploader;
 

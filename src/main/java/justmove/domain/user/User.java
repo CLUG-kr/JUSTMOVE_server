@@ -30,18 +30,18 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name = "user_follow", joinColumns = @JoinColumn(name = "from_user"), inverseJoinColumns =
     @JoinColumn(name = "to_user"))
     private final Set<User> followers = new HashSet<>();
 
-    @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "followers")
     private final Set<User> followings = new HashSet<>();
 
-    @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "uploader")
     private final List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private final List<Action> actions = new ArrayList<>();
 
     @Builder
