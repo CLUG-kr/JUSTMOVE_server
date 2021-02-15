@@ -1,6 +1,7 @@
 package justmove.domain.user;
 
 import justmove.domain.BaseEntity;
+import justmove.domain.action.Action;
 import justmove.domain.challenge.Challenge;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +33,16 @@ public class User extends BaseEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_follow", joinColumns = @JoinColumn(name = "from_user"), inverseJoinColumns =
     @JoinColumn(name = "to_user"))
-    private Set<User> followers = new HashSet<>();
+    private final Set<User> followers = new HashSet<>();
 
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
-    private Set<User> followings = new HashSet<>();
+    private final Set<User> followings = new HashSet<>();
 
     @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL)
-    private List<Challenge> challenges = new ArrayList<>();
+    private final List<Challenge> challenges = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Action> actions = new ArrayList<>();
 
     @Builder
     public User(String name, String email, String picture, Role role) {
