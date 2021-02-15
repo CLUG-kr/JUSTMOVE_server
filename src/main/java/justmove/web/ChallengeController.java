@@ -9,10 +9,7 @@ import justmove.web.dto.RegisterChallengeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -37,6 +34,12 @@ public class ChallengeController {
                     "실패했습니다"), HttpStatus.SERVICE_UNAVAILABLE);
         }
         return new ResponseEntity<>(ApiResponseMessage.success(HttpStatus.CREATED.value()), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<ApiResponseMessage> getPopularChallenges() {
+        return new ResponseEntity<>(ApiResponseMessage.data(HttpStatus.OK.value(),
+                challengeService.getPopularChallenges()), HttpStatus.OK);
     }
 
 }
