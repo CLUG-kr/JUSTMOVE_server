@@ -1,7 +1,11 @@
 package justmove.service;
 
+import justmove.domain.action.Action;
+import justmove.domain.action.ActionRepository;
+import justmove.domain.action.Score;
 import justmove.domain.challenge.Challenge;
 import justmove.domain.challenge.ChallengeRepository;
+import justmove.domain.challenge.Movie;
 import justmove.domain.tag.Tag;
 import justmove.domain.user.MockUser;
 import justmove.domain.user.User;
@@ -43,6 +47,8 @@ public class ChallengeServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActionRepository actionRepository;
 
     @BeforeEach
     void setUp() {
@@ -102,5 +108,45 @@ public class ChallengeServiceTest {
         Challenge challenge = challengeRepository.findByUploader(user1).get(0);
         List<String> resultTags = challenge.getTags().stream().map(Tag::getName).collect(Collectors.toList());
         assertThat(resultTags).isEqualTo(tags);
+    }
+
+    @Test
+    @Transactional
+    public void action_수가_가장_많은_순서대로_Challenge를_가져온다() {
+        // given
+        Movie movie1 = Movie.builder().movieLink("testLink1").build();
+        Challenge challenge1 =
+                Challenge.builder().title("제목1").description("내용1").movie(movie1).tags(Collections.emptyList()).uploader(user1).build();
+        Movie movie2 = Movie.builder().movieLink("testLink2").build();
+        Challenge challenge2 =
+                Challenge.builder().title("제목2").description("내용2").movie(movie2).tags(Collections.emptyList()).uploader(user1).build();
+        Movie movie3 = Movie.builder().movieLink("testLink3").build();
+        Challenge challenge3 =
+                Challenge.builder().title("제목3").description("내용3").movie(movie3).tags(Collections.emptyList()).uploader(user1).build();
+
+        challengeRepository.save(challenge1);
+        challengeRepository.save(challenge2);
+        challengeRepository.save(challenge3);
+
+        Score score1 = Score.builder().score(100D).build();
+        Action action1 = Action.builder().user(user1).score(score1).challenge(challenge1).build();
+        Score score2 = Score.builder().score(100D).build();
+        Action action2 = Action.builder().user(user1).score(score2).challenge(challenge2).build();
+        Score score3 = Score.builder().score(100D).build();
+        Action action3 = Action.builder().user(user1).score(score3).challenge(challenge2).build();
+        Score score4 = Score.builder().score(100D).build();
+        Action action4 = Action.builder().user(user1).score(score4).challenge(challenge2).build();
+
+        actionRepository.save(action1);
+        actionRepository.save(action2);
+        actionRepository.save(action3);
+        actionRepository.save(action4);
+        // when
+        List<Challenge> challenges = challengeRepository.getPopularChallenges();
+        System.out.println(challenges);
+        // then
+        assertThat(challenges.get(0).getId()).isEqualTo(challenge2.getId());
+        assertThat(challenges.get(1).getId()).isEqualTo(challenge1.getId());
+        assertThat(challenges.get(2).getId()).isEqualTo(challenge3.getId());
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -36,6 +37,11 @@ public class ChallengeService {
         challengeRepository.save(challenge);
 
         return fileUrl;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Challenge> getPopularChallenges() {
+        return challengeRepository.getPopularChallenges();
     }
 
 }
