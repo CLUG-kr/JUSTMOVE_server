@@ -1,5 +1,8 @@
 package justmove.service.user;
 
+import justmove.domain.challenge.Challenge;
+import justmove.domain.challenge.ChallengeRepository;
+import justmove.domain.challenge.Movie;
 import justmove.domain.user.MockUser;
 import justmove.domain.user.User;
 import justmove.domain.user.UserRepository;
@@ -11,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,6 +30,9 @@ public class SocialServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ChallengeRepository challengeRepository;
+
     @Autowired
     private SocialService socialService;
 
@@ -39,6 +48,7 @@ public class SocialServiceTest {
 
     @AfterEach
     public void tearDown() {
+        challengeRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -110,5 +120,26 @@ public class SocialServiceTest {
         assertThatThrownBy(() -> socialService.follow(user1.getId(), 100L)).isExactlyInstanceOf(UserNotFoundException.class);
         assertThatThrownBy(() -> socialService.follow(100L, user1.getId())).isExactlyInstanceOf(UserNotFoundException.class);
         assertThatThrownBy(() -> socialService.follow(100L, 200L)).isExactlyInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    @Transactional
+    public void 팔로잉한_사람들의_challenge를_최신순_리스트로_가져온다() {
+        // given
+        user1.follow(user2);
+        Movie movie1 = Movie.builder().movieLink("testLink1").build();
+        Challenge challenge1 =
+                Challenge.builder().title("제목1").description("내용1").movie(movie1).tags(Collections.emptyList()).uploader(user2).build();
+        Movie movie2 = Movie.builder().movieLink("testLink2").build();
+        Challenge challenge2 =
+                Challenge.builder().title("제목2").description("내용2").movie(movie2).tags(Collections.emptyList()).uploader(user2).build();
+
+        challengeRepository.save(challenge1);
+        challengeRepository.save(challenge2);
+        // when
+        List<Challenge> challenges = socialService.getFollowingChallenges(user1);
+        // then
+        assertThat(challenges.get(0).getId()).isEqualTo(challenge2.getId());
+        assertThat(challenges.get(1).getId()).isEqualTo(challenge1.getId());
     }
 }
