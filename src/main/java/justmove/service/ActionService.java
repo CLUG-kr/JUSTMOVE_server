@@ -6,6 +6,7 @@ import justmove.domain.action.Score;
 import justmove.domain.challenge.Challenge;
 import justmove.domain.challenge.ChallengeRepository;
 import justmove.domain.user.User;
+import justmove.service.exception.ActionNotFoundException;
 import justmove.service.exception.ChallengeNotFoundException;
 import justmove.web.dto.RegisterActionDto;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,10 @@ public class ActionService {
         Action action = Action.builder().user(user).score(score).challenge(challenge).build();
 
         return actionRepository.save(action);
+    }
+
+    public Action getActionByUser(User user) throws ActionNotFoundException {
+        return actionRepository.findByUser(user).orElseThrow(() -> new ActionNotFoundException("UserId -> " + user.getId()));
     }
 
 }
