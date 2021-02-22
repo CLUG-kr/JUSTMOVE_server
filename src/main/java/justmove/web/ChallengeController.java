@@ -42,4 +42,11 @@ public class ChallengeController {
                 challengeService.getPopularChallenges()), HttpStatus.OK);
     }
 
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<ApiResponseMessage> getChallengeInfo(@PathVariable("challengeId") Long challengeId,
+                                                               @LoginUser User user) {
+        return new ResponseEntity<>(ApiResponseMessage.data(HttpStatus.OK.value(),
+                challengeService.getChallengeInfo(user, challengeId)), HttpStatus.OK);
+    }
+
 }

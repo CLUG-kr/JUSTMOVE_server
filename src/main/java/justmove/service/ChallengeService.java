@@ -1,16 +1,22 @@
 package justmove.service;
 
+import justmove.domain.action.Action;
+import justmove.domain.action.ActionRepository;
 import justmove.domain.challenge.Challenge;
 import justmove.domain.challenge.ChallengeRepository;
 import justmove.domain.challenge.Movie;
 import justmove.domain.tag.Tag;
 import justmove.domain.user.User;
+import justmove.service.exception.ChallengeNotFoundException;
+import justmove.web.dto.ChallengeInfoDto;
+import justmove.web.dto.RankingDto;
 import justmove.web.dto.RegisterChallengeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +27,7 @@ public class ChallengeService {
     private final Uploader s3UploaderService;
 
     private final ChallengeRepository challengeRepository;
+    private final ActionRepository actionRepository;
 
     @Transactional
     public String registerChallenge(RegisterChallengeRequestDto dto, User uploader) throws IOException {
@@ -44,4 +51,32 @@ public class ChallengeService {
         return challengeRepository.getPopularChallenges();
     }
 
+    @Transactional(readOnly = true)
+    public ChallengeInfoDto getChallengeInfo(User actionUser, Long challengeId) {
+        Challenge challenge =
+                challengeRepository.findById(challengeId).orElseThrow(() -> new ChallengeNotFoundException(
+                        "challengeId : " + challengeId));
+        Action action = actionRepository.findByUserAndChallenge(actionUser, challenge).orElse(null);
+        Double actionScore = action == null ? null : action.getScore().getScore();
+
+        List<Action> actions = actionRepository.findByChallenge(challenge);
+        List<RankingDto> rankings = new ArrayList<>();
+        Double scoreSum = 0D;
+        for (Action e : actions) {
+            rankings.add(new RankingDto(e.getUser().getName(), e.getScore().getScore()));
+            scoreSum += e.getScore().getScore();
+        }
+
+        Double averageScore = rankings.size() == 0 ? 0 : scoreSum / rankings.size();
+
+        return ChallengeInfoDto.builder()
+                .challengeTitle(challenge.getTitle())
+                .challengeDescription(challenge.getDescription())
+                .tags(challenge.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+                .userName(challenge.getUploader().getName())
+                .myScore(actionScore)
+                .rankings(rankings)
+                .averageScore(averageScore)
+                .build();
+    }
 }
