@@ -17,12 +17,12 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             String redirectUri = (String) session.getAttribute("prevPage");
             System.out.println("redirect : " + redirectUri);
             getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/landing");
-            if (redirectUri != null) {
-                session.removeAttribute("prevPage");
-                getRedirectStrategy().sendRedirect(request, response, redirectUri);
-            } else {
-                getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/");
-            }
+//            if (redirectUri != null) {
+//                session.removeAttribute("prevPage");
+//                getRedirectStrategy().sendRedirect(request, response, redirectUri);
+//            } else {
+//                getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/");
+//            }
         } else {
             getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/");
         }
