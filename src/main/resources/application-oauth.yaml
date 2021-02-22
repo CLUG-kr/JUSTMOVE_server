@@ -8,11 +8,11 @@ spring:
               - profile
               - email
           naver:
-            redirect_uri_template: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect_uri_template: 'http://ec2-54-180-165-194.ap-northeast-2.compute.amazonaws.com/{action}/oauth2/code/{registrationId}'
             authorization_grant_type: authorization_code
             scope:
               - name
-              - emaiL
+              - email
               - profile_image
             client-name: Naver
         provider:
