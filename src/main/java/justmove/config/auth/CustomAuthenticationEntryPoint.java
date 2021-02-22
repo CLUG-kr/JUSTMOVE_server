@@ -15,6 +15,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) {
         System.out.println("CustomAuthenticationEntryPoint");
+        System.out.println(authException.getLocalizedMessage());
+        System.out.println(authException.getMessage());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
