@@ -67,6 +67,8 @@ public class ChallengeService {
             scoreSum += e.getScore().getScore();
         }
 
+        rankings.sort((o1, o2) -> o1.getScore() > o2.getScore() ? 1 : o1.getScore().equals(o2.getScore()) ? 0 : -1);
+
         Double averageScore = rankings.size() == 0 ? 0 : scoreSum / rankings.size();
 
         return ChallengeInfoDto.builder()
