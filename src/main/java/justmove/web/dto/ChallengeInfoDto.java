@@ -26,22 +26,17 @@ public class ChallengeInfoDto {
 
     List<String> tags;
 
-    String userName;
-
     Double averageScore;
-    Double myScore;
 
     List<RankingDto> rankings;
 
     @Builder
-    public ChallengeInfoDto(String challengeTitle, String challengeDescription, List<String> tags, String userName,
-                            Double averageScore, Double myScore, List<RankingDto> rankings) {
+    public ChallengeInfoDto(String challengeTitle, String challengeDescription, List<String> tags,
+                            Double averageScore, List<RankingDto> rankings) {
         this.challengeTitle = challengeTitle;
         this.challengeDescription = challengeDescription;
         this.tags = tags;
-        this.userName = userName;
         this.averageScore = averageScore;
-        this.myScore = myScore;
         this.rankings = rankings;
     }
 }

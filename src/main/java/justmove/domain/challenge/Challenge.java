@@ -3,7 +3,6 @@ package justmove.domain.challenge;
 import justmove.domain.BaseEntity;
 import justmove.domain.action.Action;
 import justmove.domain.tag.Tag;
-import justmove.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +24,6 @@ public class Challenge extends BaseEntity {
     @Embedded
     private Movie movie;
 
-    @ManyToOne
-    @JoinColumn
-    private User uploader;
-
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private final List<Action> actions = new ArrayList<>();
 
@@ -36,20 +31,10 @@ public class Challenge extends BaseEntity {
     private List<Tag> tags = new ArrayList<>();
 
     @Builder
-    public Challenge(String title, String description, Movie movie, User uploader, List<Tag> tags) {
+    public Challenge(String title, String description, Movie movie, List<Tag> tags) {
         this.title = title;
         this.description = description;
         this.movie = movie;
-        setUploader(uploader);
         this.tags = tags;
-    }
-
-    public Challenge setUploader(User uploader) {
-        if (this.uploader != null) {
-            this.uploader.getChallenges().remove(this);
-        }
-        this.uploader = uploader;
-        uploader.getChallenges().add(this);
-        return this;
     }
 }

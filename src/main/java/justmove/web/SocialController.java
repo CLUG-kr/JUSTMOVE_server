@@ -1,16 +1,17 @@
 package justmove.web;
 
 import justmove.config.auth.LoginSessionUser;
-import justmove.config.auth.LoginUser;
 import justmove.config.auth.dto.SessionUser;
-import justmove.domain.user.User;
 import justmove.service.SocialService;
 import justmove.service.exception.UserNotFoundException;
 import justmove.web.dto.ApiResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -41,9 +42,9 @@ public class SocialController {
         return new ResponseEntity<>(ApiResponseMessage.success(HttpStatus.ACCEPTED.value()), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/following/challenge")
-    public ResponseEntity<ApiResponseMessage> getFollowingChallenges(@LoginUser User user) {
-        return new ResponseEntity<>(ApiResponseMessage.data(HttpStatus.OK.value(),
-                socialService.getFollowingChallenges(user)), HttpStatus.OK);
-    }
+//    @GetMapping("/following/challenge")
+//    public ResponseEntity<ApiResponseMessage> getFollowingChallenges(@LoginUser User user) {
+//        return new ResponseEntity<>(ApiResponseMessage.data(HttpStatus.OK.value(),
+//                socialService.getFollowingChallenges(user)), HttpStatus.OK);
+//    }
 }

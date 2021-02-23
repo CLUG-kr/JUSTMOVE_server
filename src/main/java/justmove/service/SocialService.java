@@ -1,17 +1,12 @@
 package justmove.service;
 
-import justmove.domain.challenge.Challenge;
 import justmove.domain.challenge.ChallengeRepository;
 import justmove.domain.user.User;
 import justmove.domain.user.UserRepository;
 import justmove.service.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -42,9 +37,9 @@ public class SocialService {
         fromUser.unfollow(targetUser);
     }
 
-    @Transactional(readOnly = true)
-    public List<Challenge> getFollowingChallenges(User user) {
-        List<User> followings = new ArrayList<>(user.getFollowings());
-        return challengeRepository.getChallengesByUploaderIn(followings, Sort.by("createdDate").descending());
-    }
+//    @Transactional(readOnly = true)
+//    public List<Challenge> getFollowingChallenges(User user) {
+//        List<User> followings = new ArrayList<>(user.getFollowings());
+//        return challengeRepository.getChallengesByUploaderIn(followings, Sort.by("createdDate").descending());
+//    }
 }

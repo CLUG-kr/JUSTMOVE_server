@@ -2,7 +2,6 @@ package justmove.domain.action;
 
 import justmove.domain.BaseEntity;
 import justmove.domain.challenge.Challenge;
-import justmove.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,18 +19,16 @@ public class Action extends BaseEntity {
     @Embedded
     private Score score;
 
-    @ManyToOne
-    @JoinColumn
-    private User user;
+    private String userName;
 
     @ManyToOne
     @JoinColumn
     private Challenge challenge;
 
     @Builder
-    public Action(Score score, User user, Challenge challenge) {
+    public Action(Score score, String userName, Challenge challenge) {
         this.score = score;
-        this.setUser(user);
+        this.userName = userName;
         this.setChallenge(challenge);
     }
 
@@ -41,15 +38,6 @@ public class Action extends BaseEntity {
         }
         this.challenge = challenge;
         challenge.getActions().add(this);
-        return this;
-    }
-
-    public Action setUser(User user) {
-        if (this.user != null) {
-            this.user.getActions().remove(this);
-        }
-        this.user = user;
-        user.getActions().add(this);
         return this;
     }
 }

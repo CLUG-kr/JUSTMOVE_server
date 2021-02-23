@@ -37,7 +37,7 @@ public class ChallengeService {
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .movie(new Movie(fileUrl))
-                .uploader(uploader)
+//                .uploader(uploader)
                 .tags(dto.getTags().stream().map(Tag::new).collect(Collectors.toList()))
                 .build();
 
@@ -52,18 +52,18 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ChallengeInfoDto getChallengeInfo(User actionUser, Long challengeId) {
+    public ChallengeInfoDto getChallengeInfo(Long challengeId) {
         Challenge challenge =
                 challengeRepository.findById(challengeId).orElseThrow(() -> new ChallengeNotFoundException(
                         "challengeId : " + challengeId));
-        Action action = actionRepository.findByUserAndChallenge(actionUser, challenge).orElse(null);
-        Double actionScore = action == null ? null : action.getScore().getScore();
+//        Action action = actionRepository.findByUserAndChallenge(actionUser, challenge).orElse(null);
+//        Double actionScore = action == null ? null : action.getScore().getScore();
 
         List<Action> actions = actionRepository.findByChallenge(challenge);
         List<RankingDto> rankings = new ArrayList<>();
         Double scoreSum = 0D;
         for (Action e : actions) {
-            rankings.add(new RankingDto(e.getUser().getName(), e.getScore().getScore()));
+            rankings.add(new RankingDto(e.getUserName(), e.getScore().getScore()));
             scoreSum += e.getScore().getScore();
         }
 
@@ -73,8 +73,6 @@ public class ChallengeService {
                 .challengeTitle(challenge.getTitle())
                 .challengeDescription(challenge.getDescription())
                 .tags(challenge.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
-                .userName(challenge.getUploader().getName())
-                .myScore(actionScore)
                 .rankings(rankings)
                 .averageScore(averageScore)
                 .build();

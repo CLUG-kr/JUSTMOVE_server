@@ -4,6 +4,7 @@ import com.amazonaws.SdkClientException;
 import justmove.config.auth.LoginUser;
 import justmove.domain.user.User;
 import justmove.service.ChallengeService;
+import justmove.service.UserService;
 import justmove.web.dto.ApiResponseMessage;
 import justmove.web.dto.RegisterChallengeRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class ChallengeController {
 
     private final ChallengeService challengeService;
+    private final UserService userService;
 
     @PostMapping(value = "")
     public ResponseEntity<ApiResponseMessage> registerChallenge(@ModelAttribute RegisterChallengeRequestDto dto,
@@ -43,10 +45,9 @@ public class ChallengeController {
     }
 
     @GetMapping("/{challengeId}")
-    public ResponseEntity<ApiResponseMessage> getChallengeInfo(@PathVariable("challengeId") Long challengeId,
-                                                               @LoginUser User user) {
+    public ResponseEntity<ApiResponseMessage> getChallengeInfo(@PathVariable("challengeId") Long challengeId) {
         return new ResponseEntity<>(ApiResponseMessage.data(HttpStatus.OK.value(),
-                challengeService.getChallengeInfo(user, challengeId)), HttpStatus.OK);
+                challengeService.getChallengeInfo(challengeId)), HttpStatus.OK);
     }
 
 }
